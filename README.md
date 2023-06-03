@@ -1,11 +1,9 @@
 # Telenor ID ClI
 
+![Deno JS](https://img.shields.io/badge/deno%20js-000000?style=for-the-badge&logo=deno&logoColor=white)
+
 A quality of life developer tool for interacting with Telenor ID.
 
-## Download
+## Documentation
 
-> **TODO**(@JamesBradlee): Create download instructions
-
-## Usage
-
-Get usafe information by running `tid`
+[Checkout the documentation.](./docs/main.md)
