@@ -115,6 +115,7 @@ export default async function signInAndGetJwt(
   while (true) {
     const code = await getOtp(error);
     if (code.length !== 6 || !OTP_REGEX.test(code)) {
+      error = new Error("Code must 6 numbers(0-9) long");
       reportTask?.({
         type: Task.Failed,
         text: "Code must 6 numbers(0-9) long",
