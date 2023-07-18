@@ -120,4 +120,4 @@ jobs:
         env:
           VERSION: ${{ needs.versioning.outputs.version }}
         run: |
-          hub release create $(for filename in bin/*; do echo -a $filename; done) -m "Release for $VERSION" "$VERSION"
+          gh release create --verify-tag -t "Release $VERSION" -d "$VERSION" $(for filename in bin/*; do echo -a $filename; done)
