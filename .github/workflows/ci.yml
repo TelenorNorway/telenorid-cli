@@ -70,7 +70,7 @@ jobs:
       - name: Apply version ${{ needs.versioning.outputs.version }}
         env:
           VERSION: ${{ needs.versioning.outputs.version }}
-        run: echo "export default \"${VERSION}\";\n" > version.ts
+        run: printf "export default \"${VERSION}\";\n" > test.ts
       - name: Build (${{ matrix.target }})
         run: deno compile -A -o ${{matrix.target}} cli.ts
       - uses: actions/upload-artifact@v3
