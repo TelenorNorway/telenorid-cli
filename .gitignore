@@ -2,9 +2,11 @@
 !/.gitignore
 !/README.md
 !/**/
+!/.github/workflows/*.yaml
 !/.vscode/settings.json
 !/assets/**/*.png
 !/docs/**/*.md
 !/lib/**/*.ts
 !/cli.ts
 !/deps.ts
+!/version.ts
