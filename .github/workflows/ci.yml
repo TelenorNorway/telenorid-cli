@@ -32,6 +32,7 @@ jobs:
       - versioning
     permissions:
       contents: write
+    if: ${{ needs.versioning.outputs.deploy == 'yes' }}
     steps:
       - uses: actions/checkout@v3
 
@@ -40,14 +41,12 @@ jobs:
           deno-version: v1.x
 
       - name: Apply version
-        if: ${{ needs.versioning.outputs.deploy == 'yes' }}
         env:
           VERSION: ${{ needs.versioning.outputs.version }}
         run: |
           echo "export default \"${VERSION}\";\n" > version.ts
 
       - name: Compile
-        if: ${{ needs.versioning.outputs.deploy == 'yes' }}
         run: |
           rm -rf bin
           mkdir bin
@@ -56,7 +55,6 @@ jobs:
           done
 
       - name: Release artifacts
-        if: ${{ needs.versioning.outputs.deploy == 'yes' }}
         env:
           VERSION: ${{ needs.versioning.outputs.version }}
         run: |
