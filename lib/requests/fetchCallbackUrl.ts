@@ -5,11 +5,37 @@ import unsafeGetJwtPayload from "../util/unsafeGetJwtPayload.ts";
 export default async function fetchCallbackUrl(
   signInUrl: string,
 ) {
-  const _signInUrl = new URL(signInUrl);
+  let url = new URL(signInUrl);
+  let response = await browserFetch(url, { redirect: "manual" });
+  let authenticationRequestContent: undefined | string = undefined;
+  while (response.status > 300 && response.status < 400) {
+    if (url.searchParams.has("authentication_request")) {
+      authenticationRequestContent = url.searchParams.get(
+        "authentication_request",
+      ) || undefined;
+    }
+    // We don't want to handle 300 response here, but 301+ we do.
+    if (!response.headers.has("location")) {
+      throw new Error("redirect location not found from " + url);
+    }
+    url = new URL(response.headers.get("location")!, url);
+    response = await browserFetch(url, { redirect: "manual" });
+  }
+
+  if (url.searchParams.has("authentication_request")) {
+    authenticationRequestContent = url.searchParams.get(
+      "authentication_request",
+    ) || undefined;
+  }
+
+  if (!authenticationRequestContent) {
+    throw new Error("Could not get authentication request!");
+  }
   const authenticationRequest = unsafeGetJwtPayload<AuthenticationRequest>(
-    _signInUrl.searchParams.get("authentication_request")!,
+    authenticationRequestContent,
   );
-  const textContent = await (await browserFetch(signInUrl)).text();
+
+  const textContent = await response.text();
   const textContentStart = textContent.substring(
     textContent.indexOf(authenticationRequest.auc) - 1,
   );
@@ -19,6 +45,6 @@ export default async function fetchCallbackUrl(
   );
   return {
     callbackUrl: JSON.parse(textContentExact) as string,
-    callbackReferrerUrl: _signInUrl.origin + _signInUrl.pathname,
+    callbackReferrerUrl: url.origin + url.pathname,
   };
 }

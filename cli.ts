@@ -129,7 +129,7 @@ const cmd: any = new Command()
       .option(
         "-u, --username <phone:string>",
         "The phone number (XXXXXXXX)",
-        { required: true },
+        { required: false },
       )
       .option("-c, --code <code:string>", "The OTP code")
       .option("-p, --password <value:string>", "The account password")
@@ -143,7 +143,11 @@ const cmd: any = new Command()
       .action(async (options) => {
         const { accessToken, issuer } = await signInAndGetJwt(
           options.origin,
-          options.username,
+          (error) => {
+            if (!error && options.username) return options.username;
+            if (options.fail && error) throw new Error("Invalid username");
+            return Input.prompt({ message: "Username (8 digits)" });
+          },
           (error) => {
             if (!error && options.code) return options.code;
             if (options.fail && error) throw new Error("Invalid OTP");

@@ -19,7 +19,8 @@ export type ReportTask = {
   text: string;
 } | { type: Task.End };
 
-const OTP_REGEX = /^[0-9]+$/;
+const OTP_REGEX = /^[0-9]+$/g;
+const PHONE_REGEX = /^[0-9]{8}$/g;
 
 /**
  * A function that signs onto Telenor ID using the OAuth2
@@ -28,13 +29,18 @@ const OTP_REGEX = /^[0-9]+$/;
  * @param origin The origin endpoint to use when getting
  *               the JWT. For example
  *               `https://test.telenor.no`.
- * @param phoneNumber The phone number the caller wants to
- *                    sign in with. Must be in the format
- *                    of 'xxxxxxxx'.
  */
 export default async function signInAndGetJwt(
   origin: string,
-  phoneNumber: string,
+  /**
+   * A function that prompts the caller for a phone number,
+   * must be in the format of 'xxxyyzzz' (8 digits).
+   *
+   * @param invalid Whether the previous number provided
+   *                was invalid.
+   * @return The phone number.
+   */
+  getUsername: (error?: Error) => string | Promise<string>,
   /**
    * A function that prompts the caller for an OTP code,
    * must be in the format of 'xxxxxx'.
@@ -59,14 +65,16 @@ export default async function signInAndGetJwt(
   reportTask?: (reportedTask: ReportTask) => unknown,
 ): Promise<Record<"accessToken" | "issuer", string>> {
   // #region Get final url
+  let phoneNumber = await getUsername();
+  while (!PHONE_REGEX.test(phoneNumber)) {
+    phoneNumber = await getUsername(
+      new Error("Does not match the number pattern!"),
+    );
+  }
+
   await reportTask?.({ type: Task.Start, text: "Preparing authentication" });
 
   let _ = new URL("/login", origin).href;
-  _ = await fetchLocation(origin, _);
-  _ = await fetchLocation(origin, _);
-  _ = await fetchLocation(origin, _);
-  _ = await fetchLocation(origin, _);
-  _ = await fetchLocation(origin, _);
   {
     const { callbackUrl, callbackReferrerUrl } = await fetchCallbackUrl(_);
     _ = callbackUrl;
