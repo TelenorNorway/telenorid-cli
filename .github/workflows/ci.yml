@@ -33,7 +33,7 @@ jobs:
   versioning:
     name: Versioning
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
+    if: github.event_name == 'push'
     outputs:
       version: ${{ steps.version.outputs.version }}
       deploy: ${{ steps.version.outputs.deploy }}
@@ -54,7 +54,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs: [versioning]
-    if: ${{ needs.versioning.outputs.deploy == 'yes' }}
+    if: needs.versioning.outputs.deploy == 'yes'
     strategy:
       matrix:
         target:
@@ -81,7 +81,7 @@ jobs:
   release:
     name: Release binaries
     runs-on: ubuntu-latest
-    if: ${{ needs.versioning.outputs.deploy == 'yes' }}
+    if: needs.versioning.outputs.deploy == 'yes'
     needs:
       - versioning
       - qa-fmt
@@ -92,9 +92,10 @@ jobs:
       contents: write
     steps:
       - name: Verify builds
-        run: exit 1
         if: |
-          ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+          contains(needs.*.result, 'failure') ||
+          contains(needs.*.result, 'cancelled')
+        run: exit 1
       - uses: actions/checkout@v3
       - name: Apply version
         env:
