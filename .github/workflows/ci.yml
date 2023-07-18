@@ -112,3 +112,12 @@ jobs:
           git commit -m release
           git tag -f $VERSION
           git push -u origin $VERSION
+      - run: mkdir bin
+      - uses: actions/download-artifact@v3
+        with:
+          path: bin/
+      - name: Create version
+        env:
+          VERSION: ${{ needs.versioning.outputs.version }}
+        run: |
+          hub release create $(for filename in bin/*; do echo -a $filename; done) -m "Release for $VERSION" "$VERSION"
