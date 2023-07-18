@@ -116,7 +116,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: bin/
-      - name: Create version
+      - name: Create release
         env:
           VERSION: ${{ needs.versioning.outputs.version }}
         run: |
