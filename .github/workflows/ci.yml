@@ -119,5 +119,6 @@ jobs:
       - name: Create release
         env:
           VERSION: ${{ needs.versioning.outputs.version }}
+          GH_TOKEN: $ {{ github.token }}
         run: |
           gh release create --verify-tag -t "Release $VERSION" -d "$VERSION" $(for filename in bin/*; do echo $filename; done)
