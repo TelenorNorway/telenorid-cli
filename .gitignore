@@ -1,0 +1,9 @@
+*
+!/.gitignore
+!/README.md
+!/**/
+!/assets/**/*.png
+!/docs/**/*.md
+!/lib/**/*.ts
+!/cli.ts
+!/deps.ts
