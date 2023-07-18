@@ -10,6 +10,7 @@ import {
   Secret,
 } from "https://deno.land/x/cliffy@v0.25.7/prompt/mod.ts";
 import { TerminalSpinner } from "https://deno.land/x/spinners@v1.1.2/mod.ts";
+import version from "./version.ts";
 import signInAndGetJwt, { ReportTask, Task } from "./lib/tokens/jwt.ts";
 import getSamlAssertionToken from "./lib/tokens/saml.ts";
 
@@ -98,7 +99,7 @@ function handleReportedTask(task: ReportTask) {
 const cmd: any = new Command()
   .name("tid")
   .help(helpOptions)
-  .version("0.1.0")
+  .version(version)
   .description("A quality of life developer tool to interact with Telenor ID")
   .meta("Author", "James Bradlee")
   .meta("Email", "james.bradlee@telenor.no")
