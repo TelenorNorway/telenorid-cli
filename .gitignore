@@ -2,7 +2,7 @@
 !/.gitignore
 !/README.md
 !/**/
-!/.github/workflows/*.yaml
+!/.github/workflows/*.yml
 !/.vscode/settings.json
 !/assets/**/*.png
 !/docs/**/*.md
