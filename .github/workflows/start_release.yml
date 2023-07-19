@@ -22,11 +22,19 @@ jobs:
     if: github.ref == 'refs/heads/main'
   versioning:
     name: Versioning
-    uses: ./.github/workflows/fun-versioning.yml
-    if: github.ref == 'refs/heads/main'
-    with:
-      strategy: semver
-      input: ${{ inputs.releaseKind }}
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.version.outputs.deploy }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: telenornorway/action-versioning@v0.1.0
+        id: version
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          strategy: semver
+          value: ${{ inputs.releaseKind }}
   build:
     name: Build
     uses: ./.github/workflows/fun-build.yml

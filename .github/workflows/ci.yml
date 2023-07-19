@@ -6,22 +6,23 @@ jobs:
     uses: ./.github/workflows/fun-quality-assurance.yml
   versioning:
     name: Versioning
-    uses: ./.github/workflows/fun-versioning.yml
     if: github.event_name == 'push'
-    with:
-      strategy: commit
-      input: ${{ github.event.head_commit.message }}
-  env:
-    name: Echo
-    uses: ./.github/workflows/fun-echo-env.yml
-    needs: [versioning]
-    if: needs.versioning.outputs.deploy == 'yes'
-    with:
-      version: ${{ needs.versioning.outputs.version }}
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.version.outputs.deploy }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: telenornorway/action-versioning@v0.1.0
+        id: version
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          strategy: commit
+          value: ${{ github.event.head_commit.message }}
   build:
     name: Build
     uses: ./.github/workflows/fun-build.yml
-    if: needs.versioning.outputs.deploy == 'yes'
+    if: always() && needs.versioning.outputs.deploy == 'yes'
     needs: [versioning]
     permissions:
       contents: write
