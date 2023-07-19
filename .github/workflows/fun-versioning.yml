@@ -21,17 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: |
-        ${{
-          inputs.strategy == 'commit' && steps.commit.outputs.version ||
-          inputs.strategy == 'semver' && steps.semver.outputs.version ||
-          inputs.strategy == 'exact' && steps.exact.outputs.version
-        }}
+        ${{ format('{0}{1}{2}', steps.commit.outputs.version || '', steps.semver.outputs.version || '', steps.exact.outputs.version || '') }}
       deploy: |
-        ${{
-          inputs.strategy == 'commit' && steps.commit.outputs.deploy ||
-          inputs.strategy == 'semver' && steps.semver.outputs.deploy ||
-          inputs.strategy == 'exact' && steps.exact.outputs.deploy
-        }}
+        ${{ format('{0}{1}{2}', steps.commit.outputs.deploy || '', steps.semver.outputs.deploy || '', steps.exact.outputs.deploy || '') }}
     steps:
       - name: Fail on invalid strategy
         run: exit 1

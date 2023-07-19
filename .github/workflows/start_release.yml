@@ -17,6 +17,7 @@ on:
         required: false
 jobs:
   qa:
+    name: Quality Assurance
     uses: ./.github/workflows/fun-quality-assurance.yml
     if: github.ref == 'refs/heads/main'
   versioning:
