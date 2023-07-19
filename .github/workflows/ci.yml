@@ -2,6 +2,7 @@ name: ci
 on: [push, pull_request]
 jobs:
   qa:
+    name: Quality Assurance
     uses: ./.github/workflows/fun-quality-assurance.yml
   versioning:
     name: Versioning
