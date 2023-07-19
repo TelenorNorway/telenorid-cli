@@ -11,6 +11,15 @@ jobs:
     with:
       strategy: commit
       input: ${{ github.event.head_commit.message }}
+  test:
+    name: Test
+    needs: [versioning]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "$deploy $version"
+        env:
+          deploy: ${{ needs.versioning.outputs.deploy }}
+          version: ${{ needs.versioning.outputs.version }}
   build:
     name: Build
     uses: ./.github/workflows/fun-build.yml
