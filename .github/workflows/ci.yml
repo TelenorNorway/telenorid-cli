@@ -16,6 +16,8 @@ jobs:
     uses: ./.github/workflows/fun-echo-env.yml
     needs: [versioning]
     if: needs.versioning.outputs.deploy == 'yes'
+    with:
+      version: ${{ needs.versioning.outputs.version }}
   build:
     name: Build
     uses: ./.github/workflows/fun-build.yml
