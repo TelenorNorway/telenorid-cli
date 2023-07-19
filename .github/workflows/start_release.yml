@@ -54,4 +54,4 @@ jobs:
       deploy: ${{ needs.versioning.outputs.deploy }}
       version: ${{ needs.versioning.outputs.version }}
       title: |
-        ${{ inputs.releaseMessage || format('Release v{0}', needs.versioning.outputs.version) }}
+        ${{ inputs.releaseMessage || format('Release {0}', needs.versioning.outputs.version) }}
