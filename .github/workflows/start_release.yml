@@ -28,7 +28,7 @@ jobs:
       deploy: ${{ steps.version.outputs.deploy }}
       version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: telenornorway/action-versioning@v0.1.3
+      - uses: telenornorway/action-versioning@v0.1.4
         id: version
         with:
           token: ${{ github.token }}
