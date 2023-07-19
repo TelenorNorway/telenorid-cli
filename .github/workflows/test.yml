@@ -3,5 +3,4 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - run: git ls-remote .
+      - run: git ls-remote -tags ${{ github.repositoryUrl }}
