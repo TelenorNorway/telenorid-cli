@@ -12,10 +12,10 @@ jobs:
       strategy: commit
       input: ${{ github.event.head_commit.message }}
   env:
-    name: Echo env
+    name: Echo
     uses: ./.github/workflows/fun-echo-env.yml
     needs: [versioning]
-    if: always() && needs.versioning.outputs.deploy == 'yes'
+    if: needs.versioning.outputs.deploy == 'yes'
     with:
       version: ${{ needs.versioning.outputs.version }}
   build:
