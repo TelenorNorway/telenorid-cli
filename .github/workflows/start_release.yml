@@ -18,9 +18,11 @@ on:
 jobs:
   qa:
     uses: ./.github/workflows/fun-quality-assurance.yml
+    if: github.ref == 'refs/heads/main'
   versioning:
     name: Versioning
     uses: ./.github/workflows/fun-versioning.yml
+    if: github.ref == 'refs/heads/main'
     with:
       strategy: semver
       input: ${{ inputs.releaseKind }}
