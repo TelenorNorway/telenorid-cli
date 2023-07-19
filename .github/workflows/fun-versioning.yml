@@ -49,6 +49,7 @@ jobs:
           else
             echo ::error::Invalid version input, expected X.Y.Z, example 1.2.3
             echo deploy=no >> $GITHUB_OUTPUT
+            exit 1
           fi
         env:
           VERSION: ${{ inputs.input }}
@@ -60,7 +61,7 @@ jobs:
             echo deploy=yes >> $GITHUB_OUTPUT
             echo version=v$(echo $VERSION | cut -c 3-) >> $GITHUB_OUTPUT
           else
-            echo ::info::Invalid version input, expected v=X.Y.Z, example v=1.2.3
+            echo ::notice::Invalid version input, expected v=X.Y.Z, example v=1.2.3
             echo deploy=no >> $GITHUB_OUTPUT
           fi
         env:
