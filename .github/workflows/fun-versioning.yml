@@ -60,7 +60,7 @@ jobs:
             echo deploy=yes >> $GITHUB_OUTPUT
             echo version=v$(echo $VERSION | cut -c 3-) >> $GITHUB_OUTPUT
           else
-            echo ::error::Invalid version input, expected v=X.Y.Z, example v=1.2.3
+            echo ::info::Invalid version input, expected v=X.Y.Z, example v=1.2.3
             echo deploy=no >> $GITHUB_OUTPUT
           fi
         env:
