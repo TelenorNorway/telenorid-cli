@@ -36,9 +36,9 @@ jobs:
       - name: Fail on invalid strategy
         run: exit 1
         if: |
-          inputs.strategy == 'commit' ||
-          inputs.strategy == 'semver' ||
-          inputs.strategy == 'exact'
+          inputs.strategy != 'commit' &&
+          inputs.strategy != 'semver' &&
+          inputs.strategy != 'exact'
       - name: Exact versioning
         id: exact
         if: inputs.strategy == 'exact'
