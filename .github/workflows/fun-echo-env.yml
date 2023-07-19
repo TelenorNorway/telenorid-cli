@@ -1,0 +1,12 @@
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+jobs:
+  echo-env:
+    name: Echo
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ inputs.version }}
