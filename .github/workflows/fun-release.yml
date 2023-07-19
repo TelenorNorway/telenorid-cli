@@ -1,0 +1,53 @@
+name: Release
+on:
+  workflow_call:
+    inputs:
+      deploy:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+      title:
+        type: string
+        required: true
+permissions: write-all
+jobs:
+  release:
+    name: Release binaries
+    runs-on: ubuntu-latest
+    if: inputs.deploy == 'yes'
+    permissions: write-all
+    steps:
+      - name: Verify builds
+        if: |
+          contains(needs.*.result, 'failure') ||
+          contains(needs.*.result, 'cancelled')
+        run: exit 1
+      - uses: actions/checkout@v3
+      - name: Apply version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          echo "export default \"${VERSION}\";\n" > version.ts
+      - name: Create tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          git add .
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -m release
+          git tag -f $VERSION
+          git push -u origin $VERSION
+      - run: mkdir bin
+      - uses: actions/download-artifact@v3
+        with:
+          path: bin/
+      - name: Create release
+        env:
+          VERSION: ${{ inputs.version }}
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ inputs.title }}
+        run: |
+          gh release create --verify-tag -t "$TITLE" -d "$VERSION" $(for filename in bin/*/*; do echo $filename; done)

@@ -10,12 +10,33 @@ on:
           - patch
           - minor
           - major
-          - manual
         required: true
-      releaseVersion:
-        description: The semver version to release
+      releaseMessage:
+        description: The message to put in the release
         type: string
         required: false
 jobs:
   qa:
     uses: ./.github/workflows/fun-quality-assurance.yml
+  versioning:
+    name: Versioning
+    uses: ./.github/workflows/fun-versioning.yml
+    with:
+      strategy: semver
+      input: ${{ inputs.releaseKind }}
+  build:
+    name: Build
+    needs: [versioning]
+    if: needs.versioning.outputs.deploy == 'yes'
+    uses: ./.github/workflows/fun-build.yml
+    with:
+      version: ${{ needs.versioning.outputs.version }}
+  release:
+    name: Release
+    needs: [qa, versioning, build]
+    uses: ./.github/workflows/fun-release.yml
+    with:
+      deploy: ${{ needs.versioning.outputs.deploy }}
+      version: ${{ needs.versioning.outputs.version }}
+      title: |
+        ${{ inputs.releaseMessage || format('Release v{0}', needs.versioning.outputs.version) }}

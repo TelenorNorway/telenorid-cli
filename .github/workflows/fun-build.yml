@@ -1,0 +1,34 @@
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: The version to create builds for
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - x86_64-unknown-linux-gnu
+          - x86_64-pc-windows-msvc
+          - x86_64-apple-darwin
+          - aarch64-apple-darwin
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Apply version ${{ inputs.version }}
+        env:
+          VERSION: ${{ inputs.version }}
+        run: printf "export default \"${VERSION}\";\n" > test.ts
+      - name: Build (${{ matrix.target }})
+        run: deno compile -A -o ${{matrix.target}} cli.ts
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.target }}
+          path: ${{ matrix.target }}
+          retention-days: 1
