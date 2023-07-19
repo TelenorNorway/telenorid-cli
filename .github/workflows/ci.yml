@@ -1,7 +1,5 @@
 name: ci
 on: [push, pull_request]
-permissions:
-  contents: write
 jobs:
   qa:
     uses: ./.github/workflows/fun-quality-assurance.yml
@@ -22,6 +20,7 @@ jobs:
   release:
     name: Release
     needs: [qa, versioning, build]
+    permissions: write-all
     uses: ./.github/workflows/fun-release.yml
     with:
       deploy: ${{ needs.versioning.outputs.deploy }}
