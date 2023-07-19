@@ -16,6 +16,14 @@ on:
       deploy:
         value: ${{ jobs.version.outputs.deploy }}
 jobs:
+  echo-test:
+    name: Echo test
+    runs-on: ubuntu-latest
+    needs: [version]
+    steps:
+      - run: echo $version
+        env:
+          version: ${{ needs.version.outputs.version }}
   version:
     name: Versioning
     runs-on: ubuntu-latest
