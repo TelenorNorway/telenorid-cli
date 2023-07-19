@@ -11,13 +11,15 @@ on:
       title:
         type: string
         required: true
-permissions: write-all
+permissions:
+  contents: write
 jobs:
   release:
     name: Release binaries
     runs-on: ubuntu-latest
     if: inputs.deploy == 'yes'
-    permissions: write-all
+    permissions:
+      contents: write
     steps:
       - name: Verify builds
         if: |

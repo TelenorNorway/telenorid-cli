@@ -1,7 +1,5 @@
 name: Quality Assurance
 on: [workflow_call]
-permissions:
-  contents: write
 jobs:
   qa-fmt:
     name: Quality Assurance / Format

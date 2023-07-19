@@ -4,12 +4,10 @@ jobs:
   qa:
     name: Quality Assurance
     uses: ./.github/workflows/fun-quality-assurance.yml
-    permissions: read-all
   versioning:
     name: Versioning
     uses: ./.github/workflows/fun-versioning.yml
     if: github.event_name == 'push'
-    permissions: read-all
     with:
       strategy: commit
       input: ${{ github.event.head_commit.message }}
@@ -18,14 +16,16 @@ jobs:
     uses: ./.github/workflows/fun-build.yml
     if: needs.versioning.outputs.deploy == 'yes'
     needs: [versioning]
-    permissions: read-all
+    permissions:
+      contents: write
     with:
       version: ${{ needs.versioning.outputs.version }}
   release:
     name: Release
     uses: ./.github/workflows/fun-release.yml
     needs: [qa, versioning, build]
-    permissions: write-all
+    permissions:
+      contents: write
     with:
       deploy: ${{ needs.versioning.outputs.deploy }}
       version: ${{ needs.versioning.outputs.version }}
