@@ -3,33 +3,8 @@ on: [push, pull_request]
 permissions:
   contents: write
 jobs:
-  qa-fmt:
-    name: Quality Assurance / Format
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-      - run: deno fmt --check
-  qa-lint:
-    name: Quality Assurance / Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-      - run: deno lint
-  qa-test:
-    name: Quality Assurance / Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-      - run: deno test --allow-none
+  qa:
+    uses: ./.github/workflows/fun-quality-assurance.yml
   versioning:
     name: Versioning
     runs-on: ubuntu-latest
@@ -84,9 +59,7 @@ jobs:
     if: needs.versioning.outputs.deploy == 'yes'
     needs:
       - versioning
-      - qa-fmt
-      - qa-lint
-      - qa-test
+      - qa
       - build
     permissions: write-all
     steps:

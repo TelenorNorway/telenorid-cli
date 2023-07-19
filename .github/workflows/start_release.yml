@@ -1,0 +1,21 @@
+name: Start release
+on:
+  workflow_dispatch:
+    inputs:
+      releaseKind:
+        description: Kind of release
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - manual
+        required: true
+      releaseVersion:
+        description: The semver version to release
+        type: string
+        required: false
+jobs:
+  qa:
+    uses: ./.github/workflows/fun-quality-assurance.yml

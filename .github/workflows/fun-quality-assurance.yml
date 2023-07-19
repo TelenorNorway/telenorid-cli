@@ -1,0 +1,32 @@
+name: Quality Assurance
+on: [workflow_call]
+permissions:
+  contents: write
+jobs:
+  qa-fmt:
+    name: Quality Assurance / Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - run: deno fmt --check
+  qa-lint:
+    name: Quality Assurance / Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - run: deno lint
+  qa-test:
+    name: Quality Assurance / Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - run: deno test --allow-none
