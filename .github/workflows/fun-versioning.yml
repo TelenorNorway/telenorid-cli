@@ -82,6 +82,8 @@ jobs:
           versions=($(git ls-remote --tags https://$TOKEN:@github.com/$REPOSITORY.git | awk '{ if ($2 ~ /^refs\/tags\/v[0-9]+\.[0-9]+\.[0-9]+/) print substr($2, 12) }'))
           length=${#versions[@]}
 
+          echo "Tags($length): ${versions[@]}"
+
           if (( $length == 0 )); then
             echo deploy=yes >> $GITHUB_OUTPUT
             echo version=v0.1.0 >> $GITHUB_OUTPUT
