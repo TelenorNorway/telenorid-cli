@@ -15,7 +15,7 @@ jobs:
     name: Echo env
     uses: ./.github/workflows/fun-echo-env.yml
     needs: [versioning]
-    if: needs.versioning.outputs.deploy == 'yes'
+    if: always() && needs.versioning.outputs.deploy == 'yes'
     with:
       version: ${{ needs.versioning.outputs.version }}
   build:
