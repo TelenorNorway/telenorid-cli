@@ -28,15 +28,19 @@ jobs:
       input: ${{ inputs.releaseKind }}
   build:
     name: Build
-    needs: [versioning]
-    if: needs.versioning.outputs.deploy == 'yes'
     uses: ./.github/workflows/fun-build.yml
+    if: needs.versioning.outputs.deploy == 'yes'
+    needs: [versioning]
+    permissions:
+      contents: write
     with:
       version: ${{ needs.versioning.outputs.version }}
   release:
     name: Release
-    needs: [qa, versioning, build]
     uses: ./.github/workflows/fun-release.yml
+    needs: [qa, versioning, build]
+    permissions:
+      contents: write
     with:
       deploy: ${{ needs.versioning.outputs.deploy }}
       version: ${{ needs.versioning.outputs.version }}
