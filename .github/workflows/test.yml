@@ -3,4 +3,4 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: git ls-remote -tags ${{ github.repositoryUrl }}
+      - run: git ls-remote --tags ${{ github.repositoryUrl }}
