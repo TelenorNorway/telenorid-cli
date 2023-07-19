@@ -22,8 +22,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
   versioning:
     name: Versioning
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     outputs:
       deploy: ${{ steps.version.outputs.deploy }}
       version: ${{ steps.version.outputs.version }}
