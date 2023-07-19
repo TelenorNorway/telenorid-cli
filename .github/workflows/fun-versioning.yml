@@ -79,7 +79,7 @@ jobs:
           if (( $length == 0 )); then
             echo deploy=yes >> $GITHUB_OUTPUT
             echo version=v0.1.0 >> $GITHUB_OUTPUT
-            echo "No previous versions, defaulting to v0.1.0"
+            echo "::notice::No previous versions, defaulting to v0.1.0"
           else
             curl -o semver -s -f --fail-early https://raw.githubusercontent.com/fsaintjacques/semver-tool/1a547a75f946717223fb7ca821ba6f3f337e9aca/src/semver
             chmod +x semver
@@ -87,6 +87,7 @@ jobs:
 
             max=${versions[0]}
             for version in ${versions[@]:1}; do
+              echo "Comparing $version to $max"
               if [[ $(./semver compare $version $max) == "1" ]]; then
                 max=$version
               fi
