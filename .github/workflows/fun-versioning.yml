@@ -94,6 +94,7 @@ jobs:
             done
             echo deploy=yes >> $GITHUB_OUTPUT
             echo version=v$(./semver bump $FUNC $max) >> $GITHUB_OUTPUT
+            echo "deploy($deploy) version($version)"
           fi
         env:
           TOKEN: ${{ github.token }}
