@@ -2,26 +2,30 @@ name: ci
 on: [push, pull_request]
 jobs:
   qa:
+    name: Quality Assurance
     uses: ./.github/workflows/fun-quality-assurance.yml
+    permissions: read-all
   versioning:
     name: Versioning
-    if: github.event_name == 'push'
     uses: ./.github/workflows/fun-versioning.yml
+    if: github.event_name == 'push'
+    permissions: read-all
     with:
       strategy: commit
       input: ${{ github.event.head_commit.message }}
   build:
     name: Build
-    needs: [versioning]
-    if: needs.versioning.outputs.deploy == 'yes'
     uses: ./.github/workflows/fun-build.yml
+    if: needs.versioning.outputs.deploy == 'yes'
+    needs: [versioning]
+    permissions: read-all
     with:
       version: ${{ needs.versioning.outputs.version }}
   release:
     name: Release
+    uses: ./.github/workflows/fun-release.yml
     needs: [qa, versioning, build]
     permissions: write-all
-    uses: ./.github/workflows/fun-release.yml
     with:
       deploy: ${{ needs.versioning.outputs.deploy }}
       version: ${{ needs.versioning.outputs.version }}
