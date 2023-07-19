@@ -12,7 +12,7 @@ jobs:
       deploy: ${{ steps.version.outputs.deploy }}
       version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: telenornorway/action-versioning@v0.1.6
+      - uses: telenornorway/action-versioning@v0.1.7
         id: version
         with:
           token: ${{ github.token }}
