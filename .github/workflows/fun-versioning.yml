@@ -92,8 +92,10 @@ jobs:
                 max=$version
               fi
             done
-            echo deploy=yes >> $GITHUB_OUTPUT
-            echo version=v$(./semver bump $FUNC $max) >> $GITHUB_OUTPUT
+            deploy=yes
+            version=v$(./semver bump $FUNC $max)
+            echo "deploy=$deploy" >> $GITHUB_OUTPUT
+            echo "version=$version" >> $GITHUB_OUTPUT
             echo "deploy($deploy) version($version)"
           fi
         env:
