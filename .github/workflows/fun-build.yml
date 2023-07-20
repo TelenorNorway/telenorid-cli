@@ -24,7 +24,7 @@ jobs:
       - name: Apply version ${{ inputs.version }}
         env:
           VERSION: ${{ inputs.version }}
-        run: printf "export default \"${VERSION}\";\n" > test.ts
+        run: printf "export default \"${VERSION}\";\n" > version.ts
       - name: Build (${{ matrix.target }})
         run: |
           deno compile -A -o ${{ matrix.target }} --target ${{ matrix.target }} cli.ts
