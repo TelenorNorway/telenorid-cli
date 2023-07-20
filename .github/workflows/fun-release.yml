@@ -45,6 +45,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: bin/
+      - name: List binaries
+        run: ls -Ral bin
       - name: Create release
         env:
           VERSION: ${{ inputs.version }}
