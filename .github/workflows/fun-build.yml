@@ -31,5 +31,6 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}
-          path: ${{ matrix.target }}
+          path: |
+            ${{ contains(matrix.target, 'windows') && format('{0}{1}', matrix.target, '.exe') || matrix.target }}
           retention-days: 1
