@@ -22,7 +22,7 @@ jobs:
   build:
     name: Build
     uses: ./.github/workflows/fun-build.yml
-    if: always() && needs.versioning.outputs.deploy == 'yes'
+    if: needs.versioning.outputs.deploy == 'yes'
     needs: [versioning]
     permissions:
       contents: write
