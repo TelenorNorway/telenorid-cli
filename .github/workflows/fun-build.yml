@@ -26,7 +26,8 @@ jobs:
           VERSION: ${{ inputs.version }}
         run: printf "export default \"${VERSION}\";\n" > test.ts
       - name: Build (${{ matrix.target }})
-        run: deno compile -A -o ${{matrix.target}} cli.ts
+        run: |
+          deno compile -A -o ${{ matrix.target }} --target ${{ matrix.target }} cli.ts
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}
