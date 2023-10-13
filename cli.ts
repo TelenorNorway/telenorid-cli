@@ -123,6 +123,10 @@ const cmd: any = new Command()
         { default: "jwt" },
       )
       .option(
+        "-k, --kurt",
+        "Show the KurtID when the user is signed in.",
+      )
+      .option(
         "-s, --silent",
         "Silent output the token",
         { depends: ["username", "code", "password"] },

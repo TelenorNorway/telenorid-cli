@@ -3,7 +3,7 @@
 The Telenor ID CLI can be used to interact with Telenor ID from the comfort of
 your terminal.
 
-For donwload and installation information, check out the
+For download and installation information, check out the
 [installation guide](./install.md).
 
 ## Getting the access token
