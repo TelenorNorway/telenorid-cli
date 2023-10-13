@@ -28,8 +28,10 @@ function startSpinner(text: string): TerminalSpinner {
 
 const e = new TextEncoder();
 
-async function output(text: string, copyToClipboard = false) {
-  console.log(text);
+async function output(text: string, copyToClipboard = false, noShow = false) {
+  if (!noShow) {
+    console.log(text);
+  }
   if (!copyToClipboard) return;
   const data = e.encode(text);
   switch (Deno.build.os) {
@@ -145,6 +147,11 @@ const cmd: any = new Command()
       )
       .option("-d, --debug", "Show full stack traces")
       .option("--clipboard", "Copy to clipboard")
+      .option(
+        "--hidden",
+        "Don't show the token if it's copied to clipboard",
+        {},
+      )
       .action(async (options) => {
         const { accessToken, issuer } = await signInAndGetJwt(
           options.origin,
@@ -179,8 +186,28 @@ const cmd: any = new Command()
           }
         }) || {};
         if (!accessToken) return;
+        {
+          const decoded = JSON.parse(
+            atob(
+              accessToken.substring(
+                accessToken.indexOf(".") + 1,
+                accessToken.lastIndexOf("."),
+              ).replaceAll("_", "/").replaceAll("-", "+"),
+            ),
+          );
+          if (!options.silent && options.kurt) {
+            handleReportedTask({
+              type: Task.Completed,
+              text: "KurtID: " + decoded.kurtid,
+            });
+          }
+        }
         if (options.type === "jwt") {
-          return await output(accessToken, !!options.clipboard);
+          return await output(
+            accessToken,
+            !!options.clipboard,
+            !!options.hidden,
+          );
         }
         if (!options.silent) {
           handleReportedTask({
@@ -199,7 +226,11 @@ const cmd: any = new Command()
           });
         }
         if (options.type === "saml") {
-          return await output(samlAssertionToken, !!options.clipboard);
+          return await output(
+            samlAssertionToken,
+            !!options.clipboard,
+            !!options.hidden,
+          );
         }
         if (!options.silent) {
           handleReportedTask({
@@ -207,7 +238,11 @@ const cmd: any = new Command()
             text: "Encoded with Base64",
           });
         }
-        return await output(btoa(samlAssertionToken), !!options.clipboard);
+        return await output(
+          btoa(samlAssertionToken),
+          !!options.clipboard,
+          !!options.hidden,
+        );
       }),
   )
   .command("completions", new CompletionsCommand());
