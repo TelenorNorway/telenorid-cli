@@ -35,7 +35,10 @@ export default async function fetchNextComponents(
     {
       method: "POST",
       referrer: _url.origin + _url.pathname,
-      headers: { "content-type": "application/x-www-form-urlencoded" },
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        "X-SIGNIN-TELENORID-COM-CSRF-PROTECTION": "tid",
+      },
       body: `${content}&pointerType=mouse&isTrusted=true&relativeX=${
         rand(150, 400)
       }&relativeY=${
