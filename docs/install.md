@@ -17,8 +17,8 @@ Before you get started you need to:
 
 ## Download the source code
 
-If you have an SSH key configured for bitbucket you may use the following
-command to download:
+If you have an SSH key configured for github you may use the following command
+to download:
 
 ```sh
 git clone git@github.com/TelenorNorway/telenorid-cli.git
