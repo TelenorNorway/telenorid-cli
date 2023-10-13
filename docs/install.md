@@ -21,13 +21,13 @@ If you have an SSH key configured for bitbucket you may use the following
 command to download:
 
 ```sh
-git clone ssh://git@prima.corp.telenor.no:7999/dcapi/telenor-id-cli.git
+git clone git@github.com/TelenorNorway/telenorid-cli.git
 ```
 
 If you don't, you may use https instead:
 
 ```sh
-git clone https://prima.corp.telenor.no/bitbucket/scm/dcapi/telenor-id-cli.git
+git clone https://github.com/TelenorNorway/telenorid-cli
 ```
 
 ## Install the script into path
